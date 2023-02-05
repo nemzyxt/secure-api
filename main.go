@@ -58,7 +58,7 @@ func main() {
 
 	router.HandleFunc("/", home).Methods("GET")
 	router.HandleFunc("/login", login).Methods("POST")
-	router.HandleFunc("/secure", reserved).Methods("POST")
+	router.HandleFunc("/secure", middleware.ValidateEndpoint(reserved, getSecretKey())).Methods("POST")
 
 	fmt.Println("[*] Server running on port 8080 ...")
 	log.Fatal(http.ListenAndServe(":8080", router))
