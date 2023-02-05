@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"secapi/middleware"
 	"secapi/models"
 
 	"github.com/gorilla/mux"
@@ -38,5 +39,9 @@ func private(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	fmt.Println("Hello friend")
+	router := mux.NewRouter().StrictSlash(true)
+
+	router.HandleFunc("/", landing).Methods("GET")
+	router.HandleFunc("/login", login).Methods("POST")
+	router.HandleFunc("/secure", middleware.Authenticate(private))
 }
