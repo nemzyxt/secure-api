@@ -25,11 +25,16 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 	if user.Username == "admin" && user.Password == "password123" {
 		// correct credentials
-		
+
 	} else {
 		// invalid credentials
 		w.Write([]byte("invalid creds"))
 	}
+}
+
+// private endpoint
+func private(w http.ResponseWriter, r *http.Request) {
+	w.Write([]byte("[*] This is a highly classified endpoint"))
 }
 
 func main() {
