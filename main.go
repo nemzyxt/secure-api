@@ -14,7 +14,7 @@ import (
 type User models.User
 
 // public endpoint
-func landing(w http.ResponseWriter, r *http.Request) {
+func home(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Welcome to this public endpoint"))
 }
 
@@ -37,14 +37,14 @@ func login(w http.ResponseWriter, r *http.Request) {
 }
 
 // private endpoint
-func private(w http.ResponseWriter, r *http.Request) {
+func reserved(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("[*] This is a highly classified endpoint"))
 }
 
 func main() {
 	router := mux.NewRouter().StrictSlash(true)
 
-	router.HandleFunc("/", landing).Methods("GET")
+	router.HandleFunc("/", home).Methods("GET")
 	router.HandleFunc("/login", login).Methods("POST")
 	router.HandleFunc("/secure", middleware.Authenticate())
 }
