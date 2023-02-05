@@ -4,14 +4,22 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 
 	"secapi/middleware"
 	"secapi/models"
 
 	"github.com/gorilla/mux"
+	"github.com/joho/godotenv"
 )
 
 type User models.User
+
+// extract and return the signing key
+func getSecretKey() string {
+	key := os.Getenv("SIGNING_KEY")
+	return key
+}
 
 // public endpoint
 func home(w http.ResponseWriter, r *http.Request) {
