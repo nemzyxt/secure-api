@@ -46,5 +46,5 @@ func main() {
 
 	router.HandleFunc("/", home).Methods("GET")
 	router.HandleFunc("/login", login).Methods("POST")
-	router.HandleFunc("/secure", middleware.Authenticate())
+	router.HandleFunc("/secure", middleware.Authenticate()).Methods("POST")
 }
