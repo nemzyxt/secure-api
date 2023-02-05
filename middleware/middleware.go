@@ -7,8 +7,12 @@ import (
 	"strings"
 	"time"
 
+	"secapi/models"
+
 	"github.com/dgrijalva/jwt-go"
 )
+
+type Exception models.Exception
 
 func GenerateToken(username string, password string, key string) string {
 	token := jwt.New(jwt.SigningMethodHS256)
@@ -22,7 +26,7 @@ func GenerateToken(username string, password string, key string) string {
 	return tokenString
 }
 
-func AuthEndpoint(next http.HandlerFunc, key string) http.HandlerFunc {
+func ValidateEndpoint(next http.HandlerFunc, key string) http.HandlerFunc {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		authHeader := r.Header.Get("Authorization")
 		if authHeader != "" {
@@ -30,13 +34,23 @@ func AuthEndpoint(next http.HandlerFunc, key string) http.HandlerFunc {
 			if len(bearerToken) == 2 {
 				token, err := jwt.Parse(bearerToken[1], func(token *jwt.Token) (interface{}, error) {
 					if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-						return nil, fmt.Errorf("There was an error")
+						return nil, fmt.Errorf("there was an error")
 					} 
 					return []byte(key), nil
 				})
 				if err != nil {
-					json.NewEncoder(w).Encode(Ex)
+					json.NewEncoder(w).Encode(Exception{Message: err.Error()})
+					return
 				}
+
+				if token.Valid {
+					next(w, r)
+				} else {
+					json.NewEncoder(w).Encode(Exception{Message: "invalid auth header"})
+				}
+			} else {
+				w.WriteHeader(http.StatusUnauthorized)
+				w.Write([]byte("auth header required"))
 			}
 		}
 	})
