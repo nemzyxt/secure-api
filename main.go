@@ -9,6 +9,7 @@ import (
 	"secapi/middleware"
 	"secapi/models"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 )
@@ -34,7 +35,8 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 	if user.Username == "admin" && user.Password == "password123" {
 		// correct credentials
-		token, _ := middleware.GenerateToken()
+		signingKey := getSecretKey()
+		token, _ := jwt.New()
 		w.Header().Set("Authorization", token)
 		w.Write([]byte("Authenticated"))
 
