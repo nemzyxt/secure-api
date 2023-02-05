@@ -7,3 +7,7 @@ type User struct {
 	Password string	`json:"password"`
 	jwt.StandardClaims
 }
+
+type Exception struct {
+	Message string `json:"message"`
+}
