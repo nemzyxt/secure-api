@@ -15,10 +15,10 @@ func GenerateToken(username string, password string, key string) string {
 	claims["password"] = password
 	claims["exp"] = time.Now().Add(time.Minute * 60).Unix()
 
-	tokenString, _ := token.SignedString(key)
+	tokenString, _ := token.SignedString([]byte(key))
 	return tokenString
 }
 
 func AuthEndpoint() {
-	
+
 }
