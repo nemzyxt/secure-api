@@ -3,13 +3,13 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 
 	"secapi/middleware"
 	"secapi/models"
 
-	"github.com/dgrijalva/jwt-go"
 	"github.com/gorilla/mux"
 	"github.com/joho/godotenv"
 )
@@ -35,11 +35,9 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 	if user.Username == "admin" && user.Password == "password123" {
 		// correct credentials
-		signingKey := getSecretKey()
-		token, _ := jwt.New()
-		w.Header().Set("Authorization", token)
-		w.Write([]byte("Authenticated"))
-
+		token := middleware.GenerateToken(
+							user.Username, user.Password, getSecretKey())
+		w.Write([]byte(token))
 	} else {
 		// invalid credentials
 		w.Write([]byte("Invalid Creds"))
@@ -53,8 +51,14 @@ func reserved(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	router := mux.NewRouter().StrictSlash(true)
+	if err := godotenv.Load(); err != nil {
+		panic(err)
+	}
 
 	router.HandleFunc("/", home).Methods("GET")
 	router.HandleFunc("/login", login).Methods("POST")
-	router.HandleFunc("/secure", middleware.Authenticate()).Methods("POST")
+	router.HandleFunc("/secure", reserved).Methods("POST")
+
+	fmt.Println("[*] Server running on port 8080 ...")
+	log.Fatal(http.ListenAndServe(":8080", router))
 }
