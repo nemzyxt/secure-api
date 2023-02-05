@@ -47,11 +47,15 @@ func ValidateEndpoint(next http.HandlerFunc, key string) http.HandlerFunc {
 					next(w, r)
 				} else {
 					json.NewEncoder(w).Encode(Exception{Message: "invalid auth header"})
+					return
 				}
 			} else {
 				w.WriteHeader(http.StatusUnauthorized)
 				w.Write([]byte("auth header required"))
 			}
+		} else {
+			w.WriteHeader(http.StatusUnauthorized)
+			w.Write([]byte("auth header required"))
 		}
 	})
 }
