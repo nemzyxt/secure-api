@@ -1,2 +1,2 @@
 # Secure API
-Demo on using JWTs and middleware to secure API endpoints
+Demo on using JWT middleware to secure API endpoints
