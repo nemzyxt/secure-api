@@ -1,11 +1,16 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
+	"secapi/models"
+
 	"github.com/gorilla/mux"
 )
+
+type User models.User
 
 // public endpoint
 func landing(w http.ResponseWriter, r *http.Request) {
@@ -14,7 +19,16 @@ func landing(w http.ResponseWriter, r *http.Request) {
 
 // endpoint to log in
 func login(w http.ResponseWriter, r *http.Request) {
-	
+	var user User
+
+	json.NewDecoder(r.Body).Decode(&user)
+
+	if user.Username == "admin" && user.Password == "password123" {
+		// correct credentials
+	} else {
+		// invalid credentials
+		w.Write([]byte("invalid creds"))
+	}
 }
 
 func main() {
