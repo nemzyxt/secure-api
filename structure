@@ -1,6 +1,5 @@
 middleware
-    - utils.go
-    - authhandler.go
+    - middleware.go
 models
     - models.go
 main.go
