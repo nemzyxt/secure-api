@@ -15,7 +15,7 @@ func getSigningKey() string {
 	return os.Getenv("SIGNING_KEY")
 }
 
-func generateToken(username string) (string, error) {
+func GenerateToken(username string) (string, error) {
 	key := getSigningKey()
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"name": username,

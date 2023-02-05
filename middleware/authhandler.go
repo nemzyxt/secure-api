@@ -3,7 +3,6 @@ package middleware
 import (
 	"fmt"
 	"net/http"
-	"os/user"
 	"strings"
 
 	"github.com/dgrijalva/jwt-go"

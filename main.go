@@ -26,10 +26,13 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 	if user.Username == "admin" && user.Password == "password123" {
 		// correct credentials
+		token, _ := middleware.GenerateToken()
+		w.Header().Set("Authorization", token)
+		w.Write([]byte("Authenticated"))
 
 	} else {
 		// invalid credentials
-		w.Write([]byte("invalid creds"))
+		w.Write([]byte("Invalid Creds"))
 	}
 }
 
@@ -43,5 +46,5 @@ func main() {
 
 	router.HandleFunc("/", landing).Methods("GET")
 	router.HandleFunc("/login", login).Methods("POST")
-	router.HandleFunc("/secure", middleware.Authenticate(private))
+	router.HandleFunc("/secure", middleware.Authenticate())
 }
