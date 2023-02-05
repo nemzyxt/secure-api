@@ -35,6 +35,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 
 	if user.Username == "admin" && user.Password == "password123" {
 		// correct credentials
+		fmt.Println(getSecretKey())
 		token := middleware.GenerateToken(
 							user.Username, user.Password, getSecretKey())
 		w.Write([]byte(token))

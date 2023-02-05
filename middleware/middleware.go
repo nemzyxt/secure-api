@@ -19,4 +19,6 @@ func GenerateToken(username string, password string, key string) string {
 	return tokenString
 }
 
-func AuthEndpoint()
+func AuthEndpoint() {
+	
+}
